@@ -63,7 +63,7 @@ plt.savefig('analise_vt_dashboard_fullhd.png', facecolor=fig.get_facecolor(), dp
 # Salvar CSV para gerenciamento
 df_report = pd.DataFrame({
     'Categoria': ['Confirmados', 'Análises não concluídas', 'Faltam (Guarulhos)', 'Faltam (Mogi)', 'Faltam (Santo André)', 'Faltam(Campinas)', 'Faltam(Ribeirão Preto)', 'Faltam(São Paulo)'],
-    'Quantidade': [450, 60, 29, 13, 17, 15, 2, 147] 
+    'Quantidade': [460, 60, 29, 13, 17, 15, 2, 132] 
 })
 plt.show()
 df_report.to_csv('relatorio_gestao_vt.csv', index=False)
