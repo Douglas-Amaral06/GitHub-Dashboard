@@ -32,7 +32,7 @@ ax_donut = fig.add_axes([0.35, 0.45, 0.25, 0.4])
 labels_donut = ['Confirmados', 'Faltam', 'Análises']
 sizes_donut = [confirmados, sum(data_faltam.values()), analises]
 colors_donut = ['#10b981', '#f59e0b', '#8b5cf6']
-wedges, texts, autotexts = ax_donut.pie(sizes_donut, labels=None, autopct='%1.1f%%',# Auto Formação percentual
+wedges, texts, autotexts = ax_donut.pie(sizes_donut, labels=None, autopct='%1.1f%%',# Auto Formação percentual - vendi minha alma para chegar nesse resultado
                                        startangle=90, colors=colors_donut, pctdistance=0.85,
                                        textprops={'color':"w", 'weight':'bold', 'fontsize':15})
 centre_circle = plt.Circle((0,0), 0.70, fc='#0f172a')
@@ -49,8 +49,8 @@ ax_bar.set_title('Pendências por Cidade', color='white', fontsize=22, pad=18)
 ax_bar.tick_params(axis='both', colors='white', labelsize=14)
 ax_bar.spines['top'].set_visible(False)
 ax_bar.spines['right'].set_visible(False)
-ax_bar.spines['bottom'].set_color('#475569')
-ax_bar.spines['left'].set_color('#475569')
+ax_bar.spines['bottom'].set_color("#FFA600D6")
+ax_bar.spines['left'].set_color("#FFA600D6")
 
 # Adicionar valores às barras
 for bar in bars:
@@ -58,6 +58,7 @@ for bar in bars:
     ax_bar.text(width + 1, bar.get_y() + bar.get_height()/2, f'{int(width)}',
                 ha='left', va='center', color='white', fontsize=16, fontweight='bold')
 
+plt.tight_layout()
 plt.savefig('analise_vt_dashboard_fullhd.png', facecolor=fig.get_facecolor(), dpi=100)
 
 # Salvar CSV para gerenciamento
