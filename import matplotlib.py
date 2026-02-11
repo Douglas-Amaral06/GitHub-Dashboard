@@ -58,7 +58,7 @@ for bar in bars:
     ax_bar.text(width + 1, bar.get_y() + bar.get_height()/2, f'{int(width)}',
                 ha='left', va='center', color='white', fontsize=16, fontweight='bold')
 
-plt.tight_layout()
+
 plt.savefig('analise_vt_dashboard_fullhd.png', facecolor=fig.get_facecolor(), dpi=100)
 
 # Salvar CSV para gerenciamento

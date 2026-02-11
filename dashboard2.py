@@ -2,11 +2,24 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
+import logging 
 
-# Configuração da Página (Full HD / Wide) --- (Streamlit, Pandas e Plotly para gráficos interativos)
+#Config da Log
+
+logging.basicConfig(
+    filename='atividades_rh.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%d/%m/%Y %H:%M:%S'
+)
+
+#Quem acessou o dashboard
+logging.info('"Dashboard acessado por: Douglas Amaral."')
+
+# Configuração da Página (Full HD / Wide) --- (Streamlit, Pandas e Plotly pros gráficos interativos)
 st.set_page_config(page_title="Dashboard RH - Status", layout="wide", initial_sidebar_state="collapsed")
 
-# Estilização CSS para dar o visual "Maturo e Tecnológico"
+# Estilo CSS para dar com o tema dark/tech 
 st.markdown("""
     <style>
         .block-container {padding-top: 1rem; padding-bottom: 1rem;}
@@ -16,7 +29,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- 1. Dados Iniciais (Baseados no seu pedido) ---
+
+# --- 1. Dados Iniciais - Separador por (Temas e Empresas) ---
 data = {
     'Empresa / Projeto': ['C.E.T', 'Latam', 'Coca Cola', 'Pepsico'],
     'Total Jovens': [125, 266, 21, 74],
@@ -27,7 +41,7 @@ data = {
 
 df_inicial = pd.DataFrame(data)
 
-# --- Título ---
+# --- Código do Título ---
 st.title("📊 Painel de Controle RH - Acompanhamento de Jovens")
 st.markdown("---")
 
@@ -73,14 +87,14 @@ with col_graph:
     st.subheader("🎯 Distribuição Percentual")
     
     # Preparando dados para o Donut
-    # Vamos somar os totais gerais das categorias de status
+    # Soma dos totais gerais das categorias de status
     labels = ['Confirmados', 'Não Confirmados', 'Tel. Não Encontrado']
     values = [total_conf, total_pend, total_error]
     
-    # Cores inspiradas no tema Dark/Tech (Verde Neon, Laranja, Roxo/Cinza)
+    # Cores inspiradas no tema Dark/Tech (Verde Neon, Laranja, Roxo/Cinza) 
     colors = ['#00E396', '#FEB019', '#FF4560']
 
-    # Criando o Gráfico Donut Moderno
+    # Gráfico de Pizza (Donut) com a distribuição percentual dos status
     fig = go.Figure(data=[go.Pie(
         labels=labels, 
         values=values, 
@@ -108,7 +122,7 @@ with col_graph:
         yshift=-15
     )
 
-    # Ajustes finos de layout do gráfico
+    # Ajustes de layout do gráfico
     fig.update_layout(
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
@@ -134,3 +148,6 @@ with st.expander("🔎 Análise Rápida por Empresa"):
     )
     fig_bar.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=300)
     st.plotly_chart(fig_bar, use_container_width=True)
+
+    #Rodapé pra ver onde está a log
+    st.info(f"Sistema de logs ativo. Verifique o arquivo 'atividades_rh.log' para detalhes das atividades.")
