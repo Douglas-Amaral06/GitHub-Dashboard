@@ -2,20 +2,23 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # 1. Dados atualizados
-folhas_entregues = 3
+folhas_entregues = 720
 
 dados_empresas = [
-    ('TAM LINHAS AEREAS S/A.', 341),
-    ('COMPANHIA DE ENGENHARIA DE TRAFEGO', 172),
-    ('PEPSICO DO BRASIL LTDA', 66),
-    ('BANCO DO BRASIL S.A.', 22),
-    ('SPAL INDUSTRIA BRASILEIRA DE BEBIDAS S/A', 22),
-    ('PEPSICO DO BRASIL INDUSTRIA E COM. DE ALIMENTOS LTDA.', 19), 
-    ('KAVAK TECNOLOGIA E COMERCIO DE VEICULOS LTDA.', 17),
-    ('C. CARVALHO GENEROSO MERCADO LTDA', 13),
-    ('CAIXA ECONOMICA FEDERAL', 13),
-    ('CEAGESP - COMPANHIA DE ENTREPOSTOS E ARMAZENS...', 12),
-    ('OUTROS', 222)
+    ('TAM LINHAS AEREAS S/A.', 107),
+    ('COMPANHIA DE ENGENHARIA DE TRAFEGO', 14),
+    ('PEPSICO DO BRASIL LTDA', 29),
+    ('BANCO DO BRASIL S.A.', 6),
+    ('SPAL INDUSTRIA BRASILEIRA DE BEBIDAS S/A', 5),
+    ('PEPSICO DO BRASIL INDUSTRIA E COM. DE ALIMENTOS LTDA.', 7), 
+    ('KAVAK TECNOLOGIA E COMERCIO DE VEICULOS LTDA.', 4),
+    ('POLENGHI INDUSTRIAS ALIMENTICIAS LTDA', 2),
+    ('CAIXA ECONOMICA FEDERAL', 3),
+    ('C. CARVALHO GENEROSO MERCADO LTDA', 7),
+    ('SERVICO FEDERAL DE PROCESSAMENTO DE DADOS - SERPRO', 7),
+    ('ZAMP S.A.', 7),
+    ('CEAGESP - COMPANHIA DE ENTREPOSTOS E ARMAZENS...', 0),
+    ('OUTROS', 70)
 ]
 
 # Cria o dataframe e inverte a ordem pra ficar do maior pro menor no gráfico de barras
@@ -88,5 +91,5 @@ for bar in bars:
 
 ax_bar.set_title("Top 10 Empresas + Outros", color=cor_texto, fontsize=14, fontweight='bold')
 
-#plt.tight_layout()
+
 plt.show()
