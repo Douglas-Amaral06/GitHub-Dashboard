@@ -1,9 +1,8 @@
 Categoria,Quantidade
-Confirmados,460
-Análises não concluídas,60
-Faltam (Guarulhos),29
-Faltam (Mogi),13
-Faltam (Santo André),17
-Faltam(Campinas),15
-Faltam(Ribeirão Preto),2
-Faltam(São Paulo),132
+confirmados,7
+analises,1
+Faltam (TAM LINHAS AEREAS S/A),125
+Faltam (CET),108
+Faltam (PEPSICO),37
+Faltam(COCA COLA),14
+Faltam(Outros),171
