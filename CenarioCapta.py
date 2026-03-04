@@ -1,93 +1,61 @@
-import streamlit as st
+import matplotlib.pyplot as plt
 import pandas as pd
-import plotly.express as px
 
-# Fullpage config CSS com tema escuro
-st.set_page_config(page_title="Dashboard de Pendências", layout="wide")
-
-# Bendito seja quem criou o CSS
-st.markdown("""
-    <style>
-    .main { background-color: #0d1117; }
-    .stMetric { background-color: #161b22; border: 1px solid #30363d; padding: 15px; border-radius: 10px; }
-    h1, h2, h3 { color: #c9d1d9 !important; }
-    </style>
-    """, unsafe_allow_html=True)
-
-# 1. Dados Iniciais (Onde você pode alterar os números)
+# 1. Dados e Configurações
 data_faltam = {
-    "TAM LINHAS AEREAS S/A": 125,
+    "TAM LINHAS AEREAS S/A": 75,
     "CET": 108,
     "PEPSICO": 37,
     "COCA COLA": 14,
     "Outros": 171
 }
 
-# Confirmados / Problemas com VT
-confirmados = 7 
-analises = 1   
+confirmados = 32
+analises = 1
 
-# Cálculo automatizado do Total
-total_pendencias = sum(data_faltam.values())
-total_geral = total_pendencias + confirmados + analises
+# --- Lógica para o Gráfico Donut (Unificando tudo) ---
+dados_donut = data_faltam.copy()
+dados_donut["CONFIRMADOS"] = confirmados  # Adiciona confirmados
+dados_donut["EM ANÁLISE"] = analises      # Adiciona análises
 
-# Título Principal
-st.title("📊 Relatório Executivo de Pendências")
-st.markdown("---")
+df_donut = pd.DataFrame(list(dados_donut.items()), columns=['Legenda', 'Valor'])
+df_barras = pd.DataFrame(list(data_faltam.items()), columns=['Empresa', 'Quantidade']).sort_values('Quantidade')
 
-# 2. Métricas de Destaque (Cards no topo)
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Total Geral", total_geral)
-col2.metric("Pendentes", total_pendencias, delta_color="inverse")
-col3.metric("Confirmados", confirmados)
-col4.metric("Em Análise", analises)
+# O total geral agora é a soma de tudo que está no dicionário do donut
+total_geral = sum(dados_donut.values())
 
-st.markdown("##")
+# 2. Configuração Visual (Tema Dark GitHub)
+plt.style.use('dark_background')
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 8))
+fig.suptitle(f'STATUS OPERACIONAL - TOTAL: {total_geral}', fontsize=22, color="#ffffff", fontweight='bold')
 
-# DataFrame para os gráficos
-df = pd.DataFrame(list(data_faltam.items()), columns=['Empresa', 'Quantidade'])
+# --- GRÁFICO 1: DONUT ---
+# Cores: Tons de azul (empresas), Verde (Confirmados) e Amarelo/Laranja (Análises)
+cores_donut = ['#FFA600D6', '#FFA600D6', '#FFA600D6', '#FFA600D6', '#FFA600D6', '#238636', '#8b5cf6'] 
 
-# 3. Layout dos Gráficos
-col_left, col_right = st.columns(2)
+ax1.pie(df_donut['Valor'], labels=df_donut['Legenda'], autopct='%1.1f%%', 
+        startangle=140, colors=cores_donut, pctdistance=0.80, 
+        wedgeprops={'edgecolor': '#0d1117', 'linewidth': 2})
 
-with col_left:
-    # Gráfico de Pizza/Donut
-    st.subheader("Distribuição Percentual")
-    fig_donut = px.pie(
-        df, values='Quantidade', names='Empresa', 
-        hole=0.5,
-        color_discrete_sequence=px.colors.qualitative.Pastel
-    )
-    fig_donut.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-    st.plotly_chart(fig_donut, use_container_width=True)
+# Buraco do Donut
+centro = plt.Circle((0,0), 0.65, fc='#0d1117')
+ax1.add_artist(centro)
+ax1.set_title("Visão Geral do Processo (%)", fontsize=15, pad=20)
 
-with col_right:
-    # Gráfico de Barras
-    st.subheader("Pendências por Empresa")
-    fig_bar = px.bar(
-        df.sort_values(by='Quantidade', ascending=True), 
-        x='Quantidade', y='Empresa', 
-        orientation='h',
-        text='Quantidade',
-        color='Quantidade',
-        color_continuous_scale='Blues'
-    )
-    fig_bar.update_layout(
-        template="plotly_dark", 
-        paper_bgcolor='rgba(0,0,0,0)', 
-        plot_bgcolor='rgba(0,0,0,0)',
-        xaxis_title="Qtd de Pendências",
-        yaxis_title=""
-    )
-    st.plotly_chart(fig_bar, use_container_width=True)
+# --- GRÁFICO 2: BARRAS (Pendências por Empresa) ---
+bars = ax2.barh(df_barras['Empresa'], df_barras['Quantidade'], color='#FFA600D6')
+ax2.set_title("Faltam Por Empresa", fontsize=15, pad=20)
+ax2.bar_label(bars, padding=5, color='white', fontweight='bold')
 
-st.info("Dados atualizados automaticamente via script Python.")
+# Estética Barras
+ax2.spines['top'].set_visible(False)
+ax2.spines['right'].set_visible(False)
+ax2.set_xlabel("Quantidade de Casos")
 
-#CSV Salvar CSV para gerenciamento
+# 3. Rodapé com Informações Extras
+info_texto = f"Em Análise: {analises}  |  Total Pendentes: {sum(data_faltam.values())}  |  Total Confirmados: {confirmados}"
+plt.figtext(0.5, 0.05, info_texto, ha="center", fontsize=12, 
+            bbox={"facecolor":"#161b22", "alpha":0.8, "pad":8, "edgecolor":"#30363d"})
 
-df_report = pd.DataFrame({
-    'Categoria': ['confirmados', 'analises', 'Faltam (TAM LINHAS AEREAS S/A)', 'Faltam (CET)', 'Faltam (PEPSICO)', 'Faltam(COCA COLA)', 'Faltam(Outros)'],
-    'Quantidade': [7, 1, 125, 108, 37, 14, 171] 
-})
-#plt.show()
-df_report.to_csv('relatorio_gestao_vt.csv', index=False)
+plt.tight_layout(rect=[0, 0.08, 1, 0.95])
+plt.show()
