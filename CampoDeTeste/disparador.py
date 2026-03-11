@@ -7,43 +7,44 @@ import pyautogui
 with open('contatos.txt', 'r') as arquivo:
     numeros = arquivo.readlines()
 
-# Variações anti-spam hehehe
+# Aumentei a lista para o sorteio ser mais variado
 saudacoes = [
-    "Oi, tudo bem?",
-    "Olá, tudo bem?",
-    "E aí, tudo certo?",
-    "Opa, como você tá?",
-    "Fala, beleza?"
+    "Oi, tudo bem?", "Olá, tudo bem?", "E aí, tudo certo?", "Opa, como você tá?", 
+    "Fala, beleza?", "Bom dia, tudo bem?", "Opa, Douglas aqui!", "Oi, como vai?"
 ]
 
-print("Iniciando o disparo... Tira a mão do mouse ou o programador te bate!")
+print("Iniciando o disparo TURBO... Tira a mão do mouse!")
 
+contador = 0    
 for numero in numeros:
     numero_limpo = numero.strip() 
-    
     if not numero_limpo:
-        continue # Pula linhas em branco
-        
-    # Sorteia uma saudação e monta a mensagem
+        continue 
+    
+    contador += 1 
     inicio = random.choice(saudacoes)
     mensagem = f"{inicio} Aqui é o Douglas da Renapsi. Tenho um recado sobre a vaga de Jovem Aprendiz."
     
-    print(f"Enviando para {numero_limpo}...")
+    print(f"[{contador}] Enviando para {numero_limpo}...")
     
-    # Abre o zap, espera 20 seg pra carregar e digita
+    # Reduzi o wait_time para 20 (se sua internet for boa, carrega tranquilo)
     kit.sendwhatmsg_instantly(numero_limpo, mensagem, wait_time=20, tab_close=False)
     
-    # Força o envio (aperta Enter)
     time.sleep(2)
     pyautogui.press('enter')
     
-    # Fecha a aba pra não travar o navegador
     time.sleep(2)
     pyautogui.hotkey('ctrl', 'w')
     
-    # Pausa anti-ban (30 a 60 segundos)
-    pausa = random.randint(30, 60)
-    print(f"Mensagem enviada! Pausando por {pausa} segundos...\n")
+    # Reduzi a pausa entre mensagens para 20 a 40 segundos
+    # Isso acelera muito o processo final de 600 nomes
+    pausa = random.randint(20, 40)
+    print(f"Sucesso! Próximo em {pausa} segundos...\n")
     time.sleep(pausa)
 
-print("Fim da lista! O robô parou sozinho.")
+    # Mantive o descanso de 10 min a cada 50, isso é vital para 600 envios!
+    if contador % 50 == 0:
+        print(f"☕ {contador} enviados. Pausa de 10 min para não ser banido.")
+        time.sleep(600)
+
+print("Fim! Robô está cansado, mas missão cumprida! 🚀")
